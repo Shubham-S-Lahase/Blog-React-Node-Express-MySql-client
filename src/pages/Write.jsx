@@ -35,24 +35,24 @@ const Write = () => {
             <label htmlFor="art">Art</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="art" id="art" />
-            <label htmlFor="art">Art</label>
+            <input type="radio" name="cat" value="science" id="science" />
+            <label htmlFor="science">Science</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="art" id="art" />
-            <label htmlFor="art">Art</label>
+            <input type="radio" name="cat" value="technology" id="technology" />
+            <label htmlFor="technology">Technology</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="art" id="art" />
-            <label htmlFor="art">Art</label>
+            <input type="radio" name="cinema" value="cinema" id="cinema" />
+            <label htmlFor="art">Cinema</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="art" id="art" />
-            <label htmlFor="art">Art</label>
+            <input type="radio" name="cat" value="design" id="design" />
+            <label htmlFor="art">Design</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="art" id="art" />
-            <label htmlFor="art">Art</label>
+            <input type="radio" name="cat" value="food" id="food" />
+            <label htmlFor="art">Food</label>
           </div>
         </div>
       </div>
