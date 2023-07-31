@@ -22,7 +22,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      const res = await axios.post("api/auth/register", inputs);
+      const res = await axios.post("/auth/register", inputs);
       // console.log(res);
       if(res.statusText === "OK"){
         navigate("/login");
