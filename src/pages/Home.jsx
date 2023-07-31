@@ -1,47 +1,46 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
 
 const Home = () => {
-  const data = [
-    {
-      id: 1,
-      title: "my first post",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quidem perferendis repellat eaque deleniti doloremque natus expeditavoluptatum obcaecati.",
-      img: "https://images.pexels.com/photos/1391498/pexels-photo-1391498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id: 2,
-      title: "my first post",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quidem perferendis repellat eaque deleniti doloremque natus expeditavoluptatum obcaecati.",
-      img: "https://images.pexels.com/photos/5023937/pexels-photo-5023937.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id: 3,
-      title: "my first post",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quidem perferendis repellat eaque deleniti doloremque natus expeditavoluptatum obcaecati.",
-      img: "https://images.pexels.com/photos/4157474/pexels-photo-4157474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id: 4,
-      title: "my first post",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quidem perferendis repellat eaque deleniti doloremque natus expeditavoluptatum obcaecati.",
-      img: "https://images.pexels.com/photos/3932410/pexels-photo-3932410.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-  ];
+  const [posts, setPosts] = useState([]);
+
+  const cat = useLocation().search;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/posts${cat}`);
+        setPosts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [cat]);
+
+  const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  };
+
+
   return (
     <div className="home">
       <div className="posts">
-        {data.map((post) => (
+        {posts.map((post) => (
           <div className="post" key={post.id}>
             <div className="img">
-              <img src={post.img} alt="" />
+            <img src={`../upload/${post.img}`} alt="" />
             </div>
             <div className="content">
               <Link className="link" to={`/post/${post.id}`}>
                 <h1>{post.title}</h1>
               </Link>
-              <p>{post.desc}</p>
+              {getText(post.desc).substring(0,700)}
+              <Link className="link" to={`/post/${post.id}`}>
               <button>Read more</button>
+              </Link>
             </div>
           </div>
         ))}
