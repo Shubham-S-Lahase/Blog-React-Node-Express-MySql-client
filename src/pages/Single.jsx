@@ -58,7 +58,7 @@ const Single = () => {
   const handleDeleteComment = async (id) => {
     try {
       await axios.delete(`/comments/${id}`);
-      setComments(comments.filter(comment => comment.id !== id));
+      setComments(comments.filter((comment) => comment.id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -66,7 +66,10 @@ const Single = () => {
 
   const handleLike = async () => {
     try {
-      await axios.post("/likes/like", { post_id: postId, user_id: currentUser.id });
+      await axios.post("/likes/like", {
+        post_id: postId,
+        user_id: currentUser.id,
+      });
       setLikes(likes + 1);
     } catch (err) {
       console.log(err);
@@ -75,7 +78,9 @@ const Single = () => {
 
   const handleUnlike = async () => {
     try {
-      await axios.delete('/likes/like', { data: { post_id: postId, user_id: currentUser.id } });
+      await axios.delete("/likes/like", {
+        data: { post_id: postId, user_id: currentUser.id },
+      });
       setLikes(likes - 1);
     } catch (err) {
       console.log(err);
@@ -112,14 +117,33 @@ const Single = () => {
         </div>
         <h1>{post.title}</h1>
         {getText(post.desc)}
+        <div className="likes">
+          <p>{likes} likes</p>
+          <img src={require("../img/Like.png")} alt="" onClick={handleLike} />
+          <img
+            src={require("../img/Dislike.png")}
+            alt=""
+            onClick={handleUnlike}
+          />
+        </div>
         <div className="comments">
-          <h2>Comments</h2>
-          {comments.map(comment => (
+          <h5>Comments</h5>
+          {comments.map((comment) => (
             <div key={comment.id} className="comment">
-              <p>{comment.text}</p>
-              {currentUser.id === comment.user_id && (
-                <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
-              )}
+              <div className="c1">
+                <span id="user">{comment.username} :</span>
+                <span>{comment.text}</span>
+              </div>
+              <div className="c2">
+                <span>Posted {moment(comment.timestamp).fromNow()}</span>
+                {currentUser.id === comment.user_id && (
+                  <img
+                    src={require("../img/delete.jpg")}
+                    alt=""
+                    onClick={() => handleDeleteComment(comment.id)}
+                  />
+                )}
+              </div>
             </div>
           ))}
           <form
@@ -128,14 +152,9 @@ const Single = () => {
               handleAddComment(e.target.elements.comment.value);
             }}
           >
-            <input type="text" name="comment" />
-            <button type="submit">Add Comment</button>
+            <input type="text" name="comment" placeholder="comment" />
+            <button type="submit">Post</button>
           </form>
-        </div>
-        <div className="likes">
-          <p>{likes} likes</p>
-          <button onClick={handleLike}>Like</button>
-          <button onClick={handleUnlike}>Unlike</button>
         </div>
       </div>
       <Menu cat={post.cat} />
