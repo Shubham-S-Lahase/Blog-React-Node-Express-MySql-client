@@ -192,15 +192,15 @@ $lightGreen: #b9e7e7;
               height: 100%;
               background-color: $lightGreen;
               position: absolute;
-              top: 20px;
-              left: -20px;
+              top: 10px;
+              left: -10px;
               z-index: -1;
             }
 
             img {
               width: 100%;
-              max-height: 400px;
-              object-fit: cover;
+              height: 400px;
+              object-fit: fill;
             }
           }
 
