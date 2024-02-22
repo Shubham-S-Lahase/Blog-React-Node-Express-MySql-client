@@ -15,9 +15,12 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const logout = async (inputs) => {
-    await axios.post("/auth/logout");
-    setCurrentUser(null);
-    window.location.href="/login";
+    const confirmed = window.confirm("Are you sure to Log Out?");
+    if (confirmed) {
+      await axios.post("/auth/logout");
+      setCurrentUser(null);
+      window.location.href="/login";
+    }
   };
 
   useEffect(() => {

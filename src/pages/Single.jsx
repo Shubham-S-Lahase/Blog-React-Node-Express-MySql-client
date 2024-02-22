@@ -9,13 +9,14 @@ const Single = () => {
   const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const postId = location.pathname.split("/")[2];
   const { currentUser } = useContext(AuthContext);
-  // console.log(currentUser);
+  // console.log(currentUser.id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,36 +25,49 @@ const Single = () => {
         setPost(res.data);
         const commentsRes = await axios.get(`/post/${postId}/comments`);
         setComments(commentsRes.data);
-        const likesRes = await axios.get(`/post/${postId}/likes`);
-        setLikes(likesRes.data.count);
+        const likeRes = await axios.post("/checkUserLike", { post_id: postId, user_id: currentUser.id });
+        setIsLiked(likeRes.data.isLikedByCurrentUser);
+        const likesRes = await axios.get(`/${postId}/likes`);
+        setLikes(likesRes.data.totalLikes);
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, [postId]);
+  }, [postId, currentUser.id]);
+  
+  
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`/posts/${postId}`);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (confirmed) {
+      try {
+        await axios.delete(`/posts/${postId}`);
+        navigate("/");
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
-  const handleAddComment = async (text) => {
+  const handleAddComment = async (text, event) => {
     try {
-      await axios.post("/comments/add", {
+      const response = await axios.post("/comments/add", {
         post_id: postId,
         user_id: currentUser.id,
         text,
       });
-      setComments([...comments, { text }]);
+      // Use the id returned by the server
+      const newComment = { id: response.data.id, text, username: currentUser.username, user_id: currentUser.id };
+      setComments([...comments, newComment]);
+      event.target.elements.comment.value = "";
     } catch (err) {
       console.log(err);
     }
   };
+    
 
   const handleDeleteComment = async (id) => {
     try {
@@ -64,24 +78,14 @@ const Single = () => {
     }
   };
 
-  const handleLike = async () => {
+  const toggleLike = async () => {
     try {
-      await axios.post("/likes/like", {
+      const response = await axios.post("/like", {
         post_id: postId,
         user_id: currentUser.id,
       });
-      setLikes(likes + 1);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleUnlike = async () => {
-    try {
-      await axios.delete("/likes/like", {
-        data: { post_id: postId, user_id: currentUser.id },
-      });
-      setLikes(likes - 1);
+      setLikes(response.data.totalLikes);
+      setIsLiked(!isLiked);
     } catch (err) {
       console.log(err);
     }
@@ -97,7 +101,7 @@ const Single = () => {
       <div className="content">
         <img src={`../upload/${post?.img}`} alt="" />
         <div className="user">
-          {post.userImg && <img src={`../upload/${currentUser?.img}`} alt="" />}
+          {post.userImg && <img src={`../upload/${post.userImg}`} alt="" />}
           <div className="info">
             <span>{post.username}</span>
             <p>Posted {moment(post.date).fromNow()}</p>
@@ -119,23 +123,27 @@ const Single = () => {
         {getText(post.desc)}
         <div className="likes">
           <p>{likes} likes</p>
-          <img src={require("../img/Like.png")} alt="" onClick={handleLike} />
           <img
-            src={require("../img/Dislike.png")}
+            src={
+              isLiked
+                ? require("../img/fheart.png")
+                : require("../img/theart.png")
+            }
             alt=""
-            onClick={handleUnlike}
+            onClick={toggleLike}
           />
         </div>
+
         <div className="comments">
           <h5>Comments</h5>
           {comments.map((comment) => (
             <div key={comment.id} className="comment">
               <div className="c1">
+                {/* {console.log(comment.user_id)} */}
                 <span id="user">{comment.username} :</span>
                 <span>{comment.text}</span>
               </div>
               <div className="c2">
-                <span>Posted {moment(comment.timestamp).fromNow()}</span>
                 {currentUser.id === comment.user_id && (
                   <img
                     src={require("../img/delete.jpg")}
@@ -149,7 +157,7 @@ const Single = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleAddComment(e.target.elements.comment.value);
+              handleAddComment(e.target.elements.comment.value, e);
             }}
           >
             <input type="text" name="comment" placeholder="comment" />

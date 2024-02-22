@@ -35,9 +35,9 @@ const Home = () => {
             </div>
             <div className="content">
               <Link className="link" to={`/post/${post.id}`}>
-                <h1>{post.title}</h1>
+                <h1>{getText(post.title).substring(0, 30)}...</h1>
               </Link>
-              {getText(post.desc).substring(0,700)}
+              {getText(post.desc).substring(0,500)}...
               <Link className="link" to={`/post/${post.id}`}>
               <button>Read more</button>
               </Link>
