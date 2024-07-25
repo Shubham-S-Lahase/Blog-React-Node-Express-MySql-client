@@ -15,6 +15,8 @@ const Register = () => {
 
   const navigate = useNavigate();
 
+  axios.defaults.withCredentials = true;
+
   const upload = async () => {
     try {
       const formData = new FormData();
