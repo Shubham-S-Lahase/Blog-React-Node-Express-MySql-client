@@ -19,7 +19,7 @@ const Register = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.post("/upload", formData);
+      const res = await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/upload", formData);
       return res.data.url;
     } catch (err) {
       console.log(err);
@@ -36,7 +36,7 @@ const Register = () => {
     e.preventDefault();
     const img = await upload();
     try{
-      const res = await axios.post("/auth/register", {...inputs, img});
+      const res = await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/auth/register", {...inputs, img});
       console.log("Response from register API:", res);
       // console.log(res);
       if(res.statusText === "OK"){

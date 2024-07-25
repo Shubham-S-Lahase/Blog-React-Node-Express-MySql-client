@@ -19,7 +19,7 @@ const Write = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.post("/upload", formData);
+      const res = await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/upload", formData);
       console.log("Server response", res.data);
       return res.data.url;
     } catch (err) {
@@ -34,13 +34,13 @@ const Write = () => {
 
     try {
       state
-        ? await axios.put(`/posts/${state.id}`, {
+        ? await axios.put(`https://blog-react-node-express-mysql-server.onrender.com/api/posts/${state.id}`, {
             title,
             desc: value,
             cat,
             img: file ? imgUrl : "",
           })
-        : await axios.post(`/posts/`, {
+        : await axios.post(`https://blog-react-node-express-mysql-server.onrender.com/api/posts/`, {
             title,
             desc: value,
             cat,

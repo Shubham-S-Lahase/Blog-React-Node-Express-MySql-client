@@ -21,13 +21,13 @@ const Single = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/posts/${postId}`);
+        const res = await axios.get(`https://blog-react-node-express-mysql-server.onrender.com/api/posts/${postId}`);
         setPost(res.data);
-        const commentsRes = await axios.get(`/post/${postId}/comments`);
+        const commentsRes = await axios.get(`https://blog-react-node-express-mysql-server.onrender.com/api/post/${postId}/comments`);
         setComments(commentsRes.data);
-        const likeRes = await axios.post("/checkUserLike", { post_id: postId, user_id: currentUser.id });
+        const likeRes = await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/checkUserLike", { post_id: postId, user_id: currentUser.id });
         setIsLiked(likeRes.data.isLikedByCurrentUser);
-        const likesRes = await axios.get(`/${postId}/likes`);
+        const likesRes = await axios.get(`https://blog-react-node-express-mysql-server.onrender.com/api/${postId}/likes`);
         setLikes(likesRes.data.totalLikes);
       } catch (err) {
         console.log(err);
@@ -44,7 +44,7 @@ const Single = () => {
     );
     if (confirmed) {
       try {
-        await axios.delete(`/posts/${postId}`);
+        await axios.delete(`https://blog-react-node-express-mysql-server.onrender.com/api/posts/${postId}`);
         navigate("/");
       } catch (err) {
         console.log(err);
@@ -54,7 +54,7 @@ const Single = () => {
 
   const handleAddComment = async (text, event) => {
     try {
-      const response = await axios.post("/comments/add", {
+      const response = await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/comments/add", {
         post_id: postId,
         user_id: currentUser.id,
         text,
@@ -71,7 +71,7 @@ const Single = () => {
 
   const handleDeleteComment = async (id) => {
     try {
-      await axios.delete(`/comments/${id}`);
+      await axios.delete(`https://blog-react-node-express-mysql-server.onrender.com/api/comments/${id}`);
       setComments(comments.filter((comment) => comment.id !== id));
     } catch (err) {
       console.log(err);
@@ -80,7 +80,7 @@ const Single = () => {
 
   const toggleLike = async () => {
     try {
-      const response = await axios.post("/like", {
+      const response = await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/like", {
         post_id: postId,
         user_id: currentUser.id,
       });

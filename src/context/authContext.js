@@ -9,7 +9,7 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   const login = async (inputs) => {
-    const res = await axios.post("/auth/login", inputs);
+    const res = await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/auth/login", inputs);
     setCurrentUser(res.data);
     return res;
   };
@@ -17,7 +17,7 @@ export const AuthContextProvider = ({ children }) => {
   const logout = async (inputs) => {
     const confirmed = window.confirm("Are you sure to Log Out?");
     if (confirmed) {
-      await axios.post("/auth/logout");
+      await axios.post("https://blog-react-node-express-mysql-server.onrender.com/api/auth/logout");
       setCurrentUser(null);
       window.location.href="/login";
     }
