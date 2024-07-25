@@ -18,6 +18,8 @@ const Single = () => {
   const { currentUser } = useContext(AuthContext);
   // console.log(currentUser.id);
 
+  axios.defaults.withCredentials = true;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
