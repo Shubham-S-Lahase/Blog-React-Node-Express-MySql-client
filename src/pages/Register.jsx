@@ -20,7 +20,7 @@ const Register = () => {
       const formData = new FormData();
       formData.append("file", file);
       const res = await axios.post("/upload", formData);
-      return res.data;
+      return res.data.url;
     } catch (err) {
       console.log(err);
     }
@@ -37,6 +37,7 @@ const Register = () => {
     const img = await upload();
     try{
       const res = await axios.post("/auth/register", {...inputs, img});
+      console.log("Response from register API:", res);
       // console.log(res);
       if(res.statusText === "OK"){
         navigate("/login");
@@ -51,9 +52,9 @@ const Register = () => {
     <div className="auth">
       <h1>Register</h1>
       <form>
-        <input required type="text" placeholder="username" name="username" onChange={handleChange} />
-        <input required type="text" placeholder="email" name="email" onChange={handleChange} />
-        <input required type="text" placeholder="password" name="password" onChange={handleChange} />
+        <input required type="text" placeholder="Username" name="username" onChange={handleChange} />
+        <input required type="text" placeholder="Email" name="email" onChange={handleChange} />
+        <input required type="text" placeholder="Password" name="password" onChange={handleChange} />
         <input type="file" id="file" name="" onChange={(e) => setFile(e.target.files[0])} />
         <label htmlFor="file" id="upload" style={{textAlign:"center", color:"green",}}>Upload Profile Picture</label>
         <button onClick={handleSubmit}>Register</button>

@@ -6,6 +6,10 @@ const Navbar = () => {
 
   const { currentUser, logout } = useContext(AuthContext);
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <div className="navbar">
     <div className="container">
@@ -34,7 +38,7 @@ const Navbar = () => {
         <Link className="link" to="/?cat=food">
           <h6>FOOD</h6>
         </Link>
-        <span>{currentUser?.username}</span>
+        <span>{currentUser ? capitalizeFirstLetter(currentUser.username) : ""}</span>
           {currentUser ? (
             <span onClick={logout}>Logout</span>
           ) : (

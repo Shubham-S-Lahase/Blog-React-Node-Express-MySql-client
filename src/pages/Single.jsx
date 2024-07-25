@@ -96,14 +96,19 @@ const Single = () => {
     return doc.body.textContent;
   };
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <div className="single">
       <div className="content">
-        <img src={`../upload/${post?.img}`} alt="" />
+        <img src={post?.img} alt="" />
         <div className="user">
-          {post.userImg && <img src={`../upload/${post.userImg}`} alt="" />}
+          {post.userImg && <img src={post.userImg} alt="" />}
+          {/* console.log({post.userImg}); */}
           <div className="info">
-            <span>{post.username}</span>
+            <span>{capitalizeFirstLetter(post.username)}</span>
             <p>Posted {moment(post.date).fromNow()}</p>
           </div>
           {currentUser.username === post.username && (

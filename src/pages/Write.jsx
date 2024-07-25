@@ -20,9 +20,11 @@ const Write = () => {
       const formData = new FormData();
       formData.append("file", file);
       const res = await axios.post("/upload", formData);
-      return res.data;
+      console.log("Server response", res.data);
+      return res.data.url;
     } catch (err) {
       console.log(err);
+      return null;
     }
   };
 
